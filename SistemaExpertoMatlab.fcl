@@ -1,0 +1,134 @@
+FUNCTION_BLOCK SE
+    
+    VAR_INPUT
+        alimentacion: REAL;
+        glucosa: REAL;
+        genetica: REAL;
+        actividadFisica: REAL;
+    END_VAR
+
+    VAR_OUTPUT
+        riesgo: REAL;
+    END_VAR
+
+    FUZZIFY alimentacion
+        TERM bajo := trape 0 0 0 2;
+        TERM mediano := trian 1 3 4;
+        TERM alto := trape 3 4 7 7;
+    END_FUZZIFY
+
+    FUZZIFY glucosa
+        TERM normal := trape 0 0 0 90;
+        TERM preocupante := trian 85 105 126;
+        TERM muyPreocupante := trape 110 160 200 200;
+    END_FUZZIFY
+
+    FUZZIFY genetica
+        TERM ninguno := trape 0 0 0 1;
+        TERM leve := trian 1 2 3;
+        TERM grave := trape 2 3 5 5;
+    END_FUZZIFY
+
+    FUZZIFY actividadFisica
+        TERM bajo := trape 0 0 0 2;
+        TERM normal := trian 1 3 4;
+        TERM alto := trape 3 4 7 7;
+    END_FUZZIFY
+
+    DEFUZZIFY riesgo
+        TERM bajo := trape 0 0 0.01 0.09;
+        TERM normal := trian 0.05 0.15 0.3;
+        TERM alto := trian 0.2 0.5 0.6;
+        TERM critico := trape 0.5 0.65 1 1;
+        METHOD: COG;
+    END_DEFUZZIFY
+
+    RULEBLOCK R01
+        AND: MIN;
+        ACCU: MAX;
+        ACT: MIN;
+
+        RULE 1: IF alimentacion is bajo AND glucosa is normal AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 2: IF alimentacion is bajo AND glucosa is normal AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 3: IF alimentacion is bajo AND glucosa is normal AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 4: IF alimentacion is bajo AND glucosa is normal AND genetica is leve AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 5: IF alimentacion is bajo AND glucosa is normal AND genetica is leve AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 6: IF alimentacion is bajo AND glucosa is normal AND genetica is leve AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 7: IF alimentacion is bajo AND glucosa is normal AND genetica is grave AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 8: IF alimentacion is bajo AND glucosa is normal AND genetica is grave AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 9: IF alimentacion is bajo AND glucosa is normal AND genetica is grave AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 10: IF alimentacion is bajo AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS normal; 
+        RULE 11: IF alimentacion is bajo AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 12: IF alimentacion is bajo AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 13: IF alimentacion is bajo AND glucosa is preocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 14: IF alimentacion is bajo AND glucosa is preocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 15: IF alimentacion is bajo AND glucosa is preocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 16: IF alimentacion is bajo AND glucosa is preocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 17: IF alimentacion is bajo AND glucosa is preocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 18: IF alimentacion is bajo AND glucosa is preocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 19: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 20: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 21: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 22: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 23: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 24: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 25: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 26: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 27: IF alimentacion is bajo AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS critico;
+        RULE 28: IF alimentacion is mediano AND glucosa is normal AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 29: IF alimentacion is mediano AND glucosa is normal AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 30: IF alimentacion is mediano AND glucosa is normal AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 31: IF alimentacion is mediano AND glucosa is normal AND genetica is leve AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 32: IF alimentacion is mediano AND glucosa is normal AND genetica is leve AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 33: IF alimentacion is mediano AND glucosa is normal AND genetica is leve AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 34: IF alimentacion is mediano AND glucosa is normal AND genetica is grave AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 35: IF alimentacion is mediano AND glucosa is normal AND genetica is grave AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 36: IF alimentacion is mediano AND glucosa is normal AND genetica is grave AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 37: IF alimentacion is mediano AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS alto; 
+        RULE 38: IF alimentacion is mediano AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 39: IF alimentacion is mediano AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 40: IF alimentacion is mediano AND glucosa is preocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 41: IF alimentacion is mediano AND glucosa is preocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 42: IF alimentacion is mediano AND glucosa is preocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 43: IF alimentacion is mediano AND glucosa is preocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 44: IF alimentacion is mediano AND glucosa is preocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 45: IF alimentacion is mediano AND glucosa is preocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 46: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 47: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 48: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 49: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 50: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 51: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS alto;
+        RULE 52: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 53: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 54: IF alimentacion is mediano AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS critico;
+        RULE 55: IF alimentacion is alto AND glucosa is normal AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS bajo;
+        RULE 56: IF alimentacion is alto AND glucosa is normal AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS bajo;
+        RULE 57: IF alimentacion is alto AND glucosa is normal AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 58: IF alimentacion is alto AND glucosa is normal AND genetica is leve AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 59: IF alimentacion is alto AND glucosa is normal AND genetica is leve AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 60: IF alimentacion is alto AND glucosa is normal AND genetica is leve AND actividadFisica is alto THEN riesgo IS bajo;
+        RULE 61: IF alimentacion is alto AND glucosa is normal AND genetica is grave AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 62: IF alimentacion is alto AND glucosa is normal AND genetica is grave AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 63: IF alimentacion is alto AND glucosa is normal AND genetica is grave AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 64: IF alimentacion is alto AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS normal;
+        RULE 65: IF alimentacion is alto AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS normal;
+        RULE 66: IF alimentacion is alto AND glucosa is preocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 67: IF alimentacion is alto AND glucosa is preocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 68: IF alimentacion is alto AND glucosa is preocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 69: IF alimentacion is alto AND glucosa is preocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 70: IF alimentacion is alto AND glucosa is preocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 71: IF alimentacion is alto AND glucosa is preocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 72: IF alimentacion is alto AND glucosa is preocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 73: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is bajo THEN riesgo IS alto; 
+        RULE 74: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 75: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is ninguno AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 76: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is bajo THEN riesgo IS alto;
+        RULE 77: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is normal THEN riesgo IS alto;
+        RULE 78: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is leve AND actividadFisica is alto THEN riesgo IS normal;
+        RULE 79: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is bajo THEN riesgo IS critico;
+        RULE 80: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is normal THEN riesgo IS critico;
+        RULE 81: IF alimentacion is alto AND glucosa is muyPreocupante AND genetica is grave AND actividadFisica is alto THEN riesgo IS alto;
+    END_RULEBLOCK
+
+END_FUNCTION_BLOCK
