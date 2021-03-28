@@ -145,7 +145,6 @@ echo 'defuzificador Centroide: ';
 print_r($cog->defuzificar($resultados));
 echo '</br>'.'</br>';
 
-echo 'AQUIII';
 
    // echo 'defuzificador Min Of Max: '.$min->defuzificar($resultados).'</br>'.'</br>';
    // echo 'defuzificador Max Of Max: '.$max->defuzificar($resultado).'</br>'.'</br>';
